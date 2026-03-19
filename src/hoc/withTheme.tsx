@@ -1,4 +1,4 @@
-import React, { ComponentType, forwardRef } from 'react';
+import type { ComponentType } from 'react';
 import type { ThemeType } from '../types';
 
 /** Пропсы, добавляемые HOC */
@@ -7,28 +7,17 @@ export interface WithThemeProps {
 }
 
 /**
- * Higher-Order Component для передачи темы
- *
- * @param Component - Компонент для обёртывания
- * @returns Компонент с пропом theme
+ * Higher-Order Component для передачи темы через пропсы
  */
-export function withTheme<P extends object>(
-  Component: ComponentType<P & WithThemeProps>
+export function withTheme<P extends Record<string, unknown>>(
+  WrappedComponent: ComponentType<P & WithThemeProps>
 ) {
-  const WithThemeComponent = forwardRef<HTMLElement, P & { theme?: ThemeType }>(
-    ({ theme = 'light', ...props }, ref) => {
-      return (
-        <Component
-          {...(props as P)}
-          theme={theme as ThemeType}
-          ref={ref}
-        />
-      );
-    }
-  );
+  return function WithTheme(props: P & { theme?: ThemeType }) {
+    const theme: ThemeType = props.theme ?? 'light';
+    
 
-  const displayName = Component.displayName || Component.name || 'Component';
-  WithThemeComponent.displayName = `withTheme(${displayName})`;
-
-  return WithThemeComponent;
+    const { theme: themeProp, ...rest } = props;
+    
+    return <WrappedComponent {...(rest as P)} theme={theme} />;
+  };
 }

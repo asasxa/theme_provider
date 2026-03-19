@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes } from 'react';
+import type { ButtonHTMLAttributes } from 'react';
 import type { ThemeType } from '../types';
 import { withTheme } from '../hoc/withTheme';
 import { THEME_STYLES } from '../types';
@@ -8,14 +8,14 @@ export interface ThemedButtonProps extends ButtonHTMLAttributes<HTMLButtonElemen
   variant?: 'primary' | 'secondary';
 }
 
-const ThemedButtonBase: React.FC<ThemedButtonProps> = ({
+const ThemedButtonBase = ({
   theme,
   variant = 'primary',
   className = '',
   style,
   children,
   ...restProps
-}) => {
+}: ThemedButtonProps) => {
   const themeStyles = THEME_STYLES[theme];
 
   const variantStyles = variant === 'primary'
@@ -43,5 +43,4 @@ const ThemedButtonBase: React.FC<ThemedButtonProps> = ({
   );
 };
 
-// ✅ Экспортируем обёрнутый компонент
 export const ThemedButton = withTheme(ThemedButtonBase);
