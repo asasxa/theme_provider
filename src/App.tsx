@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import type { ThemeType } from './types'; 
 import { ThemedButton } from './components/ThemedButton';
-import { ThemeType, THEME_STYLES } from './types';
+import { THEME_STYLES } from './types';
 
 /** Стили для контейнера в зависимости от темы */
 const getAppContainerStyles = (theme: ThemeType) => ({

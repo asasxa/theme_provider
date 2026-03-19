@@ -1,6 +1,7 @@
 import React, { ButtonHTMLAttributes } from 'react';
+import type { ThemeType } from '../types';
 import { withTheme } from '../hoc/withTheme';
-import { THEME_STYLES, ThemeType } from '../types';
+import { THEME_STYLES } from '../types';
 
 export interface ThemedButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   theme: ThemeType;
@@ -10,26 +11,33 @@ export interface ThemedButtonProps extends ButtonHTMLAttributes<HTMLButtonElemen
 const ThemedButtonBase: React.FC<ThemedButtonProps> = ({
   theme,
   variant = 'primary',
-  children,
+  className = '',
   style,
-  ...props
+  children,
+  ...restProps
 }) => {
-  const styles = THEME_STYLES[theme];
+  const themeStyles = THEME_STYLES[theme];
+
+  const variantStyles = variant === 'primary'
+    ? { fontWeight: 'bold' as const, padding: '10px 20px' }
+    : { opacity: 0.9, padding: '8px 16px' };
 
   const buttonStyle: React.CSSProperties = {
-    background: styles.background,
-    color: styles.color,
-    border: `2px solid ${styles.border}`,
+    ...themeStyles,
+    ...variantStyles,
+    border: `2px solid ${themeStyles.border}`,
     borderRadius: '8px',
-    padding: variant === 'primary' ? '12px 24px' : '10px 20px',
-    fontWeight: variant === 'primary' ? 'bold' : 'normal',
-    cursor: props.disabled ? 'not-allowed' : 'pointer',
+    cursor: 'pointer',
     transition: 'all 0.2s ease',
     ...style,
   };
 
   return (
-    <button style={buttonStyle} {...props}>
+    <button
+      className={`themed-button themed-button--${theme} themed-button--${variant} ${className}`}
+      style={buttonStyle}
+      {...restProps}
+    >
       {children}
     </button>
   );
