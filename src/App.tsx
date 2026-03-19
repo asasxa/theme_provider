@@ -22,9 +22,6 @@ const App = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   };
 
-  const handleButtonClick = () => {
-    alert(`Кнопка нажата! Текущая тема: ${theme}`);
-  };
 
   return (
     <div style={getAppContainerStyles(theme)}>
