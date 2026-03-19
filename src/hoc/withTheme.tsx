@@ -32,4 +32,3 @@ export function withTheme<P extends object>(
 
   return WithThemeComponent;
 }
-}
