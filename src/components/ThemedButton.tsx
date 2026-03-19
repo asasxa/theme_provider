@@ -43,4 +43,5 @@ const ThemedButtonBase: React.FC<ThemedButtonProps> = ({
   );
 };
 
+// ✅ Экспортируем обёрнутый компонент
 export const ThemedButton = withTheme(ThemedButtonBase);

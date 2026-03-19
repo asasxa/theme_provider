@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { ThemeType } from './types'; 
+import type { ThemeType } from './types';
 import { ThemedButton } from './components/ThemedButton';
 import { THEME_STYLES } from './types';
 

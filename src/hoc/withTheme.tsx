@@ -1,34 +1,35 @@
-import React, { ComponentType, ForwardedRef, forwardRef } from 'react';
+import React, { ComponentType, forwardRef } from 'react';
 import type { ThemeType } from '../types';
 
+/** Пропсы, добавляемые HOC */
 export interface WithThemeProps {
   theme: ThemeType;
 }
 
-export type WithThemeInjected<P> = P & WithThemeProps;
-
-export function withTheme<P extends Record<string, unknown>>(
-  Component: ComponentType<WithThemeInjected<P>>
+/**
+ * Higher-Order Component для передачи темы
+ *
+ * @param Component - Компонент для обёртывания
+ * @returns Компонент с пропом theme
+ */
+export function withTheme<P extends object>(
+  Component: ComponentType<P & WithThemeProps>
 ) {
-  const WithThemeComponent = forwardRef(function WithThemeComponent(
-    props: P & { theme?: ThemeType },
-    ref: ForwardedRef<unknown>
-  ) {
-    const theme: ThemeType = props.theme ?? 'light';
+  const WithThemeComponent = forwardRef<HTMLElement, P & { theme?: ThemeType }>(
+    ({ theme = 'light', ...props }, ref) => {
+      return (
+        <Component
+          {...(props as P)}
+          theme={theme as ThemeType}
+          ref={ref}
+        />
+      );
+    }
+  );
 
-    const { theme: _, ...restProps } = props;
-
-    return (
-      <Component
-        {...(restProps as P)}
-        theme={theme}
-        ref={ref as React.ForwardedRef<React.ElementType>}
-      />
-    );
-  });
-
-  const componentName = Component.displayName || Component.name || 'Component';
-  WithThemeComponent.displayName = `withTheme(${componentName})`;
+  const displayName = Component.displayName || Component.name || 'Component';
+  WithThemeComponent.displayName = `withTheme(${displayName})`;
 
   return WithThemeComponent;
+}
 }
